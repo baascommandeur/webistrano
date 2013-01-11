@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
   <% @page_title = "Hosts" %>
-  <h1>Hosts</h1>
+  <h2>Hosts</h2>
 <% end %>
 
 <% content_for :breadcrumb do %>
@@ -9,32 +9,38 @@
   <% end %>
 <% end %>
 
-<section>
-  <h2><%= pluralize(Host.count, 'Host')%> listed</h2>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Stages</th>
-        <th>Roles</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @hosts.each do |host| %>
+<fieldset class="fieldset">
+  <legend><%= pluralize(Host.count, 'Host')%> listed</legend>
+  
+  <% if @hosts.empty? %>
+    No projects configured yet.<br />
+    <br />
+  <% else %>
+    <table class="table table-striped">
+      <thead>
         <tr>
-          <td><%= link_to host.name, host %></td>
-          <td><%= host.stages.count %></td>
-          <td><%= host.roles.count %></td>
-          <% if current_user.admin? %>
-            <td><%= link_to 'Edit', [:edit, host] %></td>
-            <td><%= link_to 'Delete', host, data: { confirm: 'Are you sure?' }, method: :delete %></td>
-          <% end %>
+          <th>Name</th>
+          <th>Stages</th>
+          <th>Roles</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-
-  <% if current_user.admin? %>
-    <p><%= link_to 'New host', new_host_path %></p>
+      </thead>
+      <tbody>
+        <% @hosts.each do |host| %>
+          <tr>
+            <td><%= link_to host.name, host %></td>
+            <td><%= host.stages.count %></td>
+            <td><%= host.roles.count %></td>
+            <% if current_user.admin? %>
+              <td><%= link_to 'Edit', [:edit, host] %></td>
+              <td><%= link_to 'Delete', host, data: { confirm: 'Are you sure?' }, method: :delete %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   <% end %>
-</section>
+  
+  <% if current_user.admin? %>
+    <p><%= link_to 'New host', new_host_path, :class => 'arrow_link' %></p>
+  <% end %>
+</fieldset>

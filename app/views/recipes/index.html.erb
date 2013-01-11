@@ -1,40 +1,7 @@
-<fieldset class="fieldset">
-  <legend> <%= pluralize(Recipe.count, 'Recipe')%> listed</legend>
-
-<% if @recipes.empty? %>
-  <br/>
-    No recipes configured yet.<br />
-    Recipes are custom Capistrano tasks and variables that can be used across stages.
-  <br/>
-<% else %>
-  <table class="sortable">
-    <tr>
-      <th width="39%">Name</th>
-      <th width="59%">Description</th>
-      <th width="1%">#Stages</th>
-      <th width="1%">Created At</th>
-    </tr>
-    <% for recipe in @recipes %>
-      <tr class="<%= cycle :even, :odd, :name => 'recipes'  %>">
-        <td><%= link_to recipe.name, recipe_path(recipe) %></td>
-        <td><%= recipe.description %></td>
-        <td><%= recipe.stages.count %></td>
-        <td><%= recipe.created_at.to_s(:date_with_day) rescue nil %></td>
-        <% if current_user.admin? %>
-          <td><%= link_to 'Edit', edit_recipe_path(recipe) %></td>
-          <td><%= link_to 'Delete', recipe_path(recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
-        <% end %>
-      </tr>
-    <% end %>
-  </table>
+<% content_for(:page_title) do %>
+  <% @page_title = "Recipes" %>
+  <h2>Recipes</h2>
 <% end %>
-
-<% if current_user.admin? %>
-  <br />
-  <%= link_to 'New recipe', new_recipe_path, :class => 'arrow_link' %>
-<% end %>
-
-</fieldset>
 
 <% content_for(:breadcrumb) do %>
   <%= breadcrumb_box do %>
@@ -42,7 +9,42 @@
   <% end %>
 <% end %>
 
-<% content_for(:page_title) do %>
-  <% @page_title = "Recipes" %>
-  <h2>Recipes</h2>
-<% end %>
+<fieldset class="fieldset">
+  <legend><%= pluralize(Recipe.count, 'Recipe')%> listed</legend>
+
+  <% if @recipes.empty? %>
+    No recipes configured yet.<br />
+    Recipes are custom Capistrano tasks and variables that can be used across stages.<br/>
+    <br/>
+  <% else %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Stages</th>
+          <th>Created At</th>
+        </tr>
+      </thead>
+        <tbody>
+          <% for recipe in @recipes %>
+          <tr>
+            <td><%= link_to recipe.name, recipe_path(recipe) %></td>
+            <td><%= recipe.description %></td>
+            <td><%= recipe.stages.count %></td>
+            <td><%= recipe.created_at.to_s(:date_with_day) rescue nil %></td>
+            <% if current_user.admin? %>
+              <td><%= link_to 'Edit', edit_recipe_path(recipe) %></td>
+              <td><%= link_to 'Delete', recipe_path(recipe), :data => { :confirm => 'Are you sure?' }, :method => :delete %></td>
+            <% end %>
+          </tr>
+          <% end %>
+        </tbody>    
+    </table>
+  <% end %>
+
+  <% if current_user.admin? %>
+    <p><%= link_to 'New recipe', new_recipe_path, :class => 'arrow_link' %></p>
+  <% end %>
+
+</fieldset>

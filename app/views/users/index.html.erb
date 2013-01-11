@@ -1,6 +1,6 @@
 <% content_for :page_title do %>
   <% @page_title = "Users" %>
-  <h1>Users</h1>
+  <h2>Users</h2>
 <% end %>
 
 <% content_for :breadcrumb do %>
@@ -9,11 +9,12 @@
   <% end %>
 <% end %>
 
-<section>
-  <h2> <%= pluralize(User.count, 'User')%> listed</h2>
+<fieldset class="fieldset">
+  <legend><%= pluralize(User.count, 'User')%> listed</legend>
 
   <% if @users.empty? %>
-    <p>No users added yet.</p>
+    No users added yet.</br>
+    </br>
   <% else %>
     <table class="table table-striped">
       <thead>
@@ -52,4 +53,4 @@
   <% if current_user.admin? %>
     <%= link_to 'New user', new_user_path, :class => 'arrow_link' %>
   <% end %>
-</section>
+</fieldset>
